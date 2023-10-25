@@ -1,0 +1,36 @@
+name: ads-main
+
+env:
+  INFRA_DIR: apigateway
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/${INFRA_DIR}.yml"
+      - "infra/${INFRA_DIR}/**"
+      - "infra/terraform/${INFRA_DIR}/**"
+    branches:
+      - "main"
+
+env:
+  INFRA_DIR: apigateway
+
+jobs:
+  apigateway-nonprod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo's default branch
+        uses: actions/checkout@v3
+      - name: Write config files
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: | 
+          echo "$ENV_FILE" > creds.json
+      - name: Validate ${INFRA_DIR}
+        uses: hashicorp/setup-terraform@v2
+        working-directory: ./infra
+          with:
+            terraform_version: "1.6.2"
+        run: terraform fmt
+  

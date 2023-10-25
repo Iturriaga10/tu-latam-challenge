@@ -1,0 +1,19 @@
+swagger: '2.0'
+info:
+  title: latam_challengue
+  description: API Gateway demo with 1 cloud run backends
+  version: 1.0.0
+schemes:
+  - http
+produces:
+  - application/json
+paths:
+  /users:
+    get:
+      summary: Users svc
+      operationId: list-users
+      x-google-backend:
+        address: https://users-svc-qqx6qmklha-ew.a.run.app/all
+      responses:
+        '200':
+          description: OK      
