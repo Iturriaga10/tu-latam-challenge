@@ -26,10 +26,10 @@ jobs:
           ENV_FILE: ${{ secrets.ENV_FILE }}
         run: | 
           echo "$ENV_FILE" > creds.json
-      - name: Format ${{INFRA_DIR}}
+      - name: Terraform Format
         working-directory: ./infra
         run: terraform fmt
-      - name: Validate ${{INFRA_DIR}}
+      - name: Terraform Validate 
         working-directory: ./infra
         run: terraform validate
   
