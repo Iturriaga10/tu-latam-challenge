@@ -27,13 +27,11 @@ jobs:
         run: | 
           echo "$ENV_FILE" > creds.json
       - name: Terraform Format
-        working-directory: ./infra
         run: terraform fmt
       - name: Terraform Validate 
-        working-directory: ./infra
         run: terraform validate
       - name: Terraform Plan 
         run: |
-          cd infra/${{env.INFRA_DIR}}
+          cd infra/terraform/${{env.INFRA_DIR}}
           terraform init -get=true -force-copy -backend-config=../../${{env.INFRA_DIR}}/backend.tfvars
           terraform plan -var-file=../../${{env.INFRA_DIR}}/terraform.tfvars 
