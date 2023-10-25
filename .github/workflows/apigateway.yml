@@ -19,15 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
-      
+        with:
+          terraform_version: "1.6.2"
       - name: Write config files
         env:
           ENV_FILE: ${{ secrets.ENV_FILE }}
         run: | 
           echo "$ENV_FILE" > creds.json
       - name: Validate ${INFRA_DIR}
-        with:
-          terraform_version: "1.6.2"
         working-directory: ./infra
         run: terraform fmt
   
