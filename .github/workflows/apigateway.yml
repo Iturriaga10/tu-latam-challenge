@@ -33,7 +33,7 @@ jobs:
         working-directory: ./infra
         run: terraform validate
       - name: Terraform Plan 
-        working-directory: infra/${{env.INFRA_DIR}}
         run: |
+          cd infra/${{env.INFRA_DIR}}
           terraform init -get=true -force-copy -backend-config=../../${{env.INFRA_DIR}}/backend.tfvars
           terraform plan -var-file=../../${{env.INFRA_DIR}}/terraform.tfvars 
