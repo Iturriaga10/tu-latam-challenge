@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: latam-challenge-api
+  namespace: latam-challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: latam-challenge-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: latam-challenge-api
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: nginx-proxy
+        image: nginx 
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+          - mountPath: etc/nginx/nginx.conf
+            name: nginx-proxy-config
+            subPath: nginx.conf
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+      - name: latam-challenge-api
+        image: $imageName
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: 750m
+          requests:
+            cpu: 500m
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+      volumes:
+        - configMap: 
+            name: nginx-opt-conf
+          name: nginx-proxy-config
+      imagePullSecrets:
+      - name: regcred
