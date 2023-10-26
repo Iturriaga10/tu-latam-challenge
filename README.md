@@ -8,21 +8,30 @@
 - Develop a cloud system to ingest, store and expose data, using IaC, deploying CI/CD flows. Develop quality tests, monitoring, alerts to ensure the system is working properly.
 
 ## Architecture
-- Add Architecture
 
+The proposal architecture try to be the simplest and easiest to scale. It's using a Pub/Sub component who is in charged to handle the requests and put in the right subscriptions and topics, allowing us to process all the data whiteout losing any. Also give us the possibility to create and organize the data in different topics and subscriptions helping us to scale with order if it's necessary. 
+
+![alt text](./img/arch.png)
+
+Once the data is in the subscription we have a microservice ([pubsubapp](./pubsubapp/README.md)) that is in charged to pull the data and store it in the right tables. This microservice is living in a Kubernetes cluster inside one VPC to add an extra layer of security. The processed data will be stored in Cloud Table because it's designed to process high volumes of data, create datasets and tables to organize our input data and has the advantage to BigQuery for analytic purposes. 
+
+In the presentation layer we have a microservice ([app](./app/README.md)) who is in charged to retrieve data from BigTable and show the information via HTTP. To manage our APIs, define policies for publications and usage restrictions for our microservices. We are using API Gateway to easily do all these operations through it central interface.
+
+##### Next Steps
+
+1. Implement in a real scenario.
+2. Discuss volume and traffic expected. 
+3. Use policies to define control access.
+4. Budget expectations. 
 
 #### Part 1: [IaC Infraestructure](./infra/README.md)
 
 #### Part 2: Applications and CI/CD flows
 
-- Add Readme [pubsub](./pubsubapp/README.md)
-- Add Readme [app](./app/README.md)
+- [pubsub README](./pubsubapp/README.md)
+- [app README](./app/README.md)
 
-#### Parte 3: [Integration test and quality control](./scripts/README.md)
-
-- Create Test app
-- Create Test Pubsub
-- Add README
+#### Part 3: [Integration test and quality control](./scripts/README.md)
 
 #### Part 4: Metrics and monitoring
 
