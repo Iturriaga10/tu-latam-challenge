@@ -1,0 +1,62 @@
+name: AppDeployment
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/app.yml"
+      - "app/**"
+    branches:
+      - "main"
+
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo's default branch
+        uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTIFY_PROVIDER }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+      - name: Write config files
+        working-directory: app
+        env:
+          APP_ENV_FILE: ${{ secrets.APP_ENV_FILE }}
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: | 
+          echo "$APP_ENV_FILE" > .env
+          echo "$ENV_FILE" > creds.json
+      - name: Login to GCR
+        uses: docker/login-action@v3
+        with:
+          registry: gcr.io
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+      - name: Build and push
+        working-directory: app
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}:${{ env.IMAGE_TAG }}
+      - name: Get Cluster Credentials 
+        id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name:  ${{ secrets.CLUSTER_NAME }}
+          location:  ${{ secrets.CLUSTER_REGION }}
+      - name: DeployFile
+        working-directory: app
+        run: | 
+          export imageName=${{ secrets.DOCKER_REGISTRY }}:${{ env.IMAGE_TAG }}
+          export k8sManifest=DeployFiles/overlays/app-output.yml
+          kustomize build --load-restrictor=LoadRestrictionsNone ./DeployFiles/overlays/develop > DeployFiles/overlays/app-output.yml
+          ../scripts/testing.sh
+          
