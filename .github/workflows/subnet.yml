@@ -1,4 +1,4 @@
-name: artifact-main
+name: subnet-main
 
 env:
   INFRA_DIR: subnet
