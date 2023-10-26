@@ -1,4 +1,4 @@
-name: artifact-main
+name: pubsub-main
 
 env:
   INFRA_DIR: pubsub

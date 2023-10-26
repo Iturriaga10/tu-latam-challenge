@@ -1,4 +1,4 @@
-name: artifact-main
+name: vpc-main
 
 env:
   INFRA_DIR: vpc

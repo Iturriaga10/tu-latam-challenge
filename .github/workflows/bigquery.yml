@@ -1,4 +1,4 @@
-name: artifact-main
+name: bigquery-main
 
 env:
   INFRA_DIR: bigquery

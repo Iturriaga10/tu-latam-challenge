@@ -1,4 +1,4 @@
-name: artifact-main
+name: nat-main
 
 env:
   INFRA_DIR: nat

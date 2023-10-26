@@ -1,4 +1,4 @@
-name: artifact-main
+name: nodepools-main
 
 env:
   INFRA_DIR: nodepools
