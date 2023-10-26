@@ -1,0 +1,4 @@
+google-auth 
+google-cloud-bigtable
+google-cloud-pubsub
+python-dotenv

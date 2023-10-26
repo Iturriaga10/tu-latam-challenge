@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: latam-challenge-pubsub
+  namespace: latam-challenge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: latam-challenge-pubsub
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: latam-challenge-pubsub
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: latam-challenge-pubsub
+        image: $imageName
+        resources:
+          limits:
+            cpu: 750m
+          requests:
+            cpu: 500m
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "yes"
+      volumes:
+        - configMap: 
+            name: nginx-opt-conf
+          name: nginx-proxy-config
+      imagePullSecrets:
+      - name: regcred
