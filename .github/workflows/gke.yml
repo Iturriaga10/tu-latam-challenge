@@ -1,0 +1,59 @@
+name: artifact-main
+
+env:
+  INFRA_DIR: gke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/${INFRA_DIR}.yml"
+      - "infra/${INFRA_DIR}/**"
+      - "infra/terraform/${INFRA_DIR}/**"
+    branches:
+      - "main"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.6.2"
+      - name: Write config files
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: | 
+          echo "$ENV_FILE" > creds.json
+      - name: Terraform Format
+        working-directory: infra
+        run: terraform fmt
+      - name: Terraform Validate 
+        working-directory: infra
+        run: terraform validate
+      - name: Terraform Plan 
+        working-directory: infra/terraform/${{env.INFRA_DIR}}
+        run: |
+          terraform init -get=true -force-copy -backend-config=../../${{env.INFRA_DIR}}/backend.tfvars
+          terraform plan -var-file=../../${{env.INFRA_DIR}}/terraform.tfvars
+
+  apply:
+    needs: [plan]
+    if: ${{ github.ref_name == inputs.main_branch || inputs.enable_branch_apply }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: "1.6.2"
+      - name: Write config files
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: | 
+          echo "$ENV_FILE" > creds.json
+      - name: Terraform Apply 
+        working-directory: infra/terraform/${{env.INFRA_DIR}}
+        run: |
+          terraform init -get=true -force-copy -backend-config=../../${{env.INFRA_DIR}}/backend.tfvars
+          terraform apply -var-file=../../${{env.INFRA_DIR}}/terraform.tfvars 
