@@ -1,15 +1,15 @@
 # LATAM Challenge Infraestructure
 
-Having a defined methodology to create and maintain your infrastructure is an important piece for every company. Having in mind this we propose the following pipeline, builted in GitHub Actions.
+Having a defined methodology to create and maintain your infrastructure is an important piece for every company. Having this in mind, we propose the following pipeline, built in GitHub Actions.
 
 ![alt text](../img/infra_flow.png)
 
 ## Pipeline Phases
 
-1. Terraform Format - Format all the files before to be merged
-1. Terraform Validate - Validate structure and syntax is correct
-1. Terraform Plan - Plan that the creation of the resources
-1. Terraform Apply - Create the infrastructure planned before/
+1. Terraform Format - Format all the files before merging them
+1. Terraform Validate - Validate that the structure and syntax is correct
+1. Terraform Plan - Plan the creation of the resources
+1. Terraform Apply - Create the infrastructure as planned
 
 ## Infraestructure Folder Structure
 
@@ -17,10 +17,10 @@ Having a defined methodology to create and maintain your infrastructure is an im
 └── infra
     ├── README.md       
     ├── apigateway                      # Contains all Terraform variables
-    │   ├── backend.tfvars              # Contains Terraform state configurat
-    │   └── terraform.tfvars            # Contaions GCP credentials, region and zone
+    │   ├── backend.tfvars              # Contains Terraform state configuration
+    │   └── terraform.tfvars            # Contains GCP credentials, region and zone
     ├── terraform                       # Contains the Terraform Resource/Module files
-    │   ├── apigateway                  # Resource Folder
+    │   ├── apigateway                  # Resource folder
     │   │   ├── backend.tf              # Terraform configuration
     │   │   ├── main.tf                 # Terraform resources
     │   │   ├── outputs.tf              # Terraform output
@@ -130,7 +130,7 @@ touch infra/terraform/$InfraResourceName/backend.tf infra/terraform/$InfraResour
     ```
 
 
-    2. Change to the `resource` Directory
+    2. Change to the `resource` directory
     
     ```sh
     cd infra/terraform/$InfraResourceName
@@ -153,19 +153,19 @@ touch infra/terraform/$InfraResourceName/backend.tf infra/terraform/$InfraResour
     terraform apply -var-file=../../$InfraResourceName/terraform.tfvars     
     ```
 
-7. Happy Terraformig !!
+7. Happy Terraforming !!
 
 ## Next Steps
 
 1. Create Global Workflow repo with the Terraform pipeline to have a generic file, improving agility in the creation of new users.
 2. Use artifacts to store the planning and ensure that the planning generated will be applied.
-3. Create two set of credentials for the workflows:
+3. Create two sets of credentials for the workflows:
     
-    1. First credentials (plan), has a restriction policy to just plan the infrastructure.
-    2. Second credentials (plan), has no restrictions' policy to create the infrastructure.
+    1. First credentials (plan), have a restriction policy to just plan the infrastructure.
+    2. Second credentials (plan), have a no restrictions policy to create the infrastructure.
 
-1. Create a script in charged to create the scaffolding for a new resource.
-2. Create a folder structure for different environments, regions and zones.
+1. Create a script in charge to create the scaffolding for a new resource.
+2. Create a folder structure for different environments, regions, and zones.
 
 ```
 └── infra
@@ -190,7 +190,7 @@ touch infra/terraform/$InfraResourceName/backend.tf infra/terraform/$InfraResour
 
 ## Resources
 
-[1] [GCP Teeraform good practices](https://cloud.google.com/docs/terraform/best-practices-for-terraform)
+[1] [GCP Terraform best practices](https://cloud.google.com/docs/terraform/best-practices-for-terraform)
 
 [2] [Terraform GCP Resources](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
 
