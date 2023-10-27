@@ -1,13 +1,13 @@
 # HTTP APP
 
-This app use python and flask. Is designed to retrieve information from BigTable and expose it via REST API.
+This app uses Python and Flask. It is designed to retrieve information from BigTable and expose it via REST API.
 
 ## Prerequisites 
 1. `virtualenv` installed.
-2. python3 installed.
+2. Python3 installed.
 3. Docker installed.
 
-## How to run it locally
+## How to run the HTTP APP locally
 
 1. Create the venv
 
@@ -20,7 +20,7 @@ python -m venv </path/to/new/virtual/environment>
 source </path/to/new/virtual/environment>/bin/activate 
 ```
 
-3. Install Requirements
+3. Install requirements
 ```sh
 pip install -r requirements.txt
 ```
@@ -45,10 +45,10 @@ pip install -r requirements.txt
 flask --app main run
 ```
 
-6. Happy coding !!
+6. Happy coding!
 
 
-## How to run it using Docker
+## How to run the HTTP APP using Docker
 
 1. Build
 
@@ -62,11 +62,11 @@ docker build -t app:latest .
 docker run -p 5000:5000 app:latest
 ```
 
-## How to deploy it
+## How to deploy the HTTP APP
 
-Crate a PR to main, once is approved for 2 members of the team, you are being able to merge it. Once is merged, the [pubsubapp](../.github/workflows/pubsubapp.yml) pipeline is going to be triggered. If you have further doubts, questions or errors ping us. Happy to help !  
+Create a PR to main. Once it is approved for 2 members of the team, you are able to merge it. Once it is merged, the [pubsubapp](../.github/workflows/pubsubapp.yml) pipeline is going to be triggered. If you have further doubts, questions or errors, ping us. We are happy to help!  
 
-> Note: Don't forget to Squash and merge, and delete your branch. Help us to keep clean our repos. 
+> Note: Don't forget to Squash and merge, and delete your branch. Help us to keep our repos clean. 
 
 #### Next steps
 1. Implement WSGI
